@@ -75,4 +75,20 @@ addEventListener("keydown", async (event) => {
   }
 });
 
+// Generate Game board
+const gridSize = 5; // Replace 5 with your desired grid size
+const gridContainer = document.getElementById('game-board');
+
+// Create n x n cells
+for (let i = gridSize; i > 0 ; i--) {
+  const row = document.createElement('tr');
+  gridContainer.appendChild(row); 
+  for (let j = 0; j < gridSize; j++) {
+    const cell = document.createElement('td');
+    cell.classList.add('hole');
+    cell.id = `${j} ${i}`;
+    row.appendChild(cell);
+  }
+}
+
 mountDevTools();

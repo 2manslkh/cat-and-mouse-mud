@@ -20,8 +20,40 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    MapConfig: (() => {
+      const tableId = new TableId("", "MapConfig");
+      return defineComponent(
+        world,
+        {
+          width: RecsType.Number,
+          height: RecsType.Number,
+          terrain: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
     Player: (() => {
       const tableId = new TableId("", "Player");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.Boolean,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    Movable: (() => {
+      const tableId = new TableId("", "Movable");
       return defineComponent(
         world,
         {

@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { ActivePlayer, Position } from "../codegen/Tables.sol";
+import { ActivePlayer, Position, Movable } from "../codegen/Tables.sol";
 import { addressToEntityKey } from "../utils/addressToEntityKey.sol";
 
 contract PlayerSystem is System {
@@ -17,6 +17,7 @@ contract PlayerSystem is System {
     bytes32 player = addressToEntityKey(_msgSender());
     Position.setX(player, 0);
     Position.setY(player, 0);
+    Movable.set(player, true);
     return _msgSender();
   }
 
@@ -31,6 +32,7 @@ contract PlayerSystem is System {
     bytes32 player = addressToEntityKey(_msgSender());
     Position.setX(player, 2);
     Position.setY(player, 2);
+    Movable.set(player, true);
     return _msgSender();
   }
 }

@@ -1,13 +1,14 @@
+import { awaitStreamValue, uuid } from "@latticexyz/utils";
+
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
-import { awaitStreamValue } from "@latticexyz/utils";
 import { getComponentValue } from "@latticexyz/recs";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
   { worldSend, txReduced$, singletonEntity, playerEntity }: SetupNetworkResult,
-  { Counter, Position }: ClientComponents,
+  { Counter, Position, Player }: ClientComponents,
 ) {
   const increment = async () => {
     const tx = await worldSend("increment", []);
@@ -16,39 +17,19 @@ export function createSystemCalls(
   };
 
   const moveUp = async () => {
-    const tx = await worldSend("moveUp", []);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
-    if (!playerEntity) {
-      throw new Error("no player");
-    }
-    return getComponentValue(Position, playerEntity);
+    return moveBy(0,1);
   };
 
   const moveDown = async () => {
-    const tx = await worldSend("moveDown", []);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
-    if (!playerEntity) {
-      throw new Error("no player");
-    }
-    return getComponentValue(Position, playerEntity);
+    return moveBy(0,-1);
   };
 
   const moveLeft = async () => {
-    const tx = await worldSend("moveLeft", []);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
-    if (!playerEntity) {
-      throw new Error("no player");
-    }
-    return getComponentValue(Position, playerEntity);
+      return moveBy(-1,0);
   };
 
   const moveRight = async () => {
-    const tx = await worldSend("moveRight", []);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
-    if (!playerEntity) {
-      throw new Error("no player");
-    }
-    return getComponentValue(Position, playerEntity);
+    return moveBy(1,0);
   };
 
   const registerPlayer1 = async () => {
@@ -67,6 +48,52 @@ export function createSystemCalls(
     return getComponentValue(Position, singletonEntity);
   };
 
+  const moveTo = async (x: number, y: number) => {
+    if (!playerEntity) {
+      throw new Error("no player");
+    }
+    const positionId = uuid();
+    Position.addOverride(positionId, {
+      entity: playerEntity,
+      value: { x, y },
+    });
+   
+    try {
+      const tx = await worldSend("move", [x, y]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      Position.removeOverride(positionId);
+    }
+  };
+ 
+  const moveBy = async (deltaX: number, deltaY: number) => {
+    if (!playerEntity) {
+      throw new Error("no player");
+    }
+   
+    const playerPosition = getComponentValue(Position, playerEntity);
+    if (!playerPosition) {
+      console.warn("cannot moveBy without a player position, not yet spawned?");
+      return;
+    }
+   
+    await moveTo(playerPosition.x + deltaX, playerPosition.y + deltaY);
+  };
+ 
+  const spawn = async (x: number, y: number) => {
+    if (!playerEntity) {
+      throw new Error("no player");
+    }
+ 
+    const canSpawn = getComponentValue(Player, playerEntity)?.value !== true;
+    if (!canSpawn) {
+      throw new Error("already spawned");
+    }
+ 
+    const tx = await worldSend("spawn", [x, y]);
+    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+  };
+
   return {
     increment,
     moveUp,
@@ -75,6 +102,9 @@ export function createSystemCalls(
     moveRight,
     registerPlayer1,
     registerPlayer2,
-    getPlayers
+    getPlayers,
+    moveBy,
+    moveTo,
+    spawn,
   };
 }
