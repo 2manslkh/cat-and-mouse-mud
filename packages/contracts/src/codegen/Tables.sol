@@ -7,5 +7,6 @@ import { Counter, CounterTableId } from "./tables/Counter.sol";
 import { MapConfig, MapConfigTableId } from "./tables/MapConfig.sol";
 import { Player, PlayerTableId } from "./tables/Player.sol";
 import { Movable, MovableTableId } from "./tables/Movable.sol";
+import { PlayerRole, PlayerRoleTableId } from "./tables/PlayerRole.sol";
 import { Position, PositionTableId } from "./tables/Position.sol";
 import { ActivePlayer, ActivePlayerData, ActivePlayerTableId } from "./tables/ActivePlayer.sol";

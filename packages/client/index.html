@@ -13,57 +13,78 @@
       align-content: left;
       height: 100vh;
     }
+    .info {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+    }
     .playarea-container {
       margin-left: 0px;
       margin-top: 20px;
       margin-bottom: 20px;
       display: flex;
-      width: 400px;
-      height: 400px;
+      width: auto;
+      height: auto;
       justify-content: left;
       align-content: left;
     }
     .playarea {
       display: flex;
-      width: 100%;
-      height: 100%;
+      width: auto;
+      height: auto;
       justify-content: left;
       align-content: left;
     }
     #game-board {
-      width: 320px;
-      height: 320px;
+      width: auto;
+      height: auto;
       margin: auto;
       border-collapse: collapse;
     }
 
     .hole {
-      width: 100px;
-      height: 100px;
-      border: 2px solid #000;
+      
+      width: 50px;
+      height: 50px;
+      padding: 0px;
+      border: 1px solid #000;
       cursor: pointer;
     }
 
-    .active {
-      outline: 4px solid yellow;
+    .active-p1 {
+      background-color: red;
     }
 
-    .p1 {
-      outline: 4px solid red;
-    }
-
-    .p2 {
+    .active-p2 {
       outline: 4px solid blue;
+    }
+
+    .register {
+      width: 100px;
     }
   </style>
   <body>
     <script type="module" src="/src/index.ts"></script>
     <div class="main">
       <!-- <div>Counter: <span id="counter">0</span></div> -->
-      <div>X: <span id="xpos">0</span></div>
-      <div>Y: <span id="ypos">0</span></div>
-      <button onclick="window.registerPlayer1()">Register Player 1</button>
-      <button onclick="window.registerPlayer2()">Register Player 2</button>
+      <div class="info">
+      <div>
+      <div><span>Player 1</span></div>
+      <div>Address: <span id="p1">Not registered</span></div>
+      <div>X: <span id="xpos-p1">0</span></div>
+      <div>Y: <span id="ypos-p1">0</span></div>
+      <div>Role: <span id="role-p1">0</span></div>
+      </div>
+      <div>
+        <div><span>Player 2</span></div>
+        <div>Address: <span id="p2">Not registered</span></div>
+        <div>X: <span id="xpos-p2">0</span></div>
+        <div>Y: <span id="ypos-p2">0</span></div>
+        <div>Role: <span id="role-p2">0</span></div>
+        </div>
+      </div>
+      <button class="register" onclick="window.registerPlayer1()">Register Player 1</button>
+      <button class="register" onclick="window.registerPlayer2()">Register Player 2</button>
 
       <!-- <button onclick="window.increment()">Increment</button> -->
       <!-- <button onclick="window.moveUp()">UP</button>

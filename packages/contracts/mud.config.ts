@@ -3,6 +3,7 @@ import { mudConfig } from "@latticexyz/world/register";
 export default mudConfig({
   enums: {
     TerrainType: ["None", "TallGrass", "Boulder"],
+    Role: ["Cat", "Mouse"],
   },
   tables: {
     Counter: {
@@ -20,6 +21,7 @@ export default mudConfig({
     },
     Player: "bool",
     Movable: "bool",
+    PlayerRole: "Role",
     Position: {
       dataStruct: false,
       schema: {

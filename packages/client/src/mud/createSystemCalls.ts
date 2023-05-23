@@ -94,6 +94,19 @@ export function createSystemCalls(
     await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
+  const attack = async () => {
+    if (!playerEntity) {
+      throw new Error("no player");
+    }
+    try {
+      const tx = await worldSend("attack", []);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      // Position.removeOverride(positionId);
+    }
+ 
+  }
+
   return {
     increment,
     moveUp,
@@ -106,5 +119,6 @@ export function createSystemCalls(
     moveBy,
     moveTo,
     spawn,
+    attack
   };
 }
